@@ -404,8 +404,8 @@ class TickerBase():
             rec.index.name = 'Date'
             rec.columns = utils.camel2title(rec.columns)
             self._recommendations = rec[['Firm', 'To Grade', 'From Grade', 'Action']].sort_index()
-        except Exception:
-            pass
+        except Exception as e:
+            print("ERROR", e)
         
         return self._recommendations
 
