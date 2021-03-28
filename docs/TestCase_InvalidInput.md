@@ -20,15 +20,51 @@ Windows 10, MacOS
 
 No special setup
 
-### Test Script/Results
+### Test Script/Results (Before Software Fixing)
+
+#### 1. Unit Tesing
+| Test | Input                      | Expected Result | Actual Result | Pass/Fail |
+| ---- | -------------------------- | --------------- | ------------- | --------- |
+| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | An Exception is raised            | ` KeyError: 'upgradeDowngradeHistory'`          | Pass      |
+| 2    | data = False               |An Exception is raised            | `TypeError: 'bool' object is not subscriptable`          | Pass      |
+| 3    | data = None                | An Exception is raised            | `TypeError: 'NoneType' object is not subscriptable`          | Pass      |
+| 4    | data = 'Wrong data format' | An Exception is raised            | `TypeError: string indices must be integers`          | Pass      |
+| 5    | data = [1, 2, 3]           | An Exception is raised            | `TypeError: list indices must be integers or slices, not str`          | Pass      |
+| 6    | data = 1                   | An Exception is raised            | `TypeError: 'int' object is not subscriptable`          | Pass      |
+
+* Noted that this test case was marked as "expected failure" so the expected results of the test scripts are failure. If all the test scripts fail, the program will return success as no bugs were found in the program. If all the test scripts pass, the program will return failure as there are bugs in the program.
+
+#### 2. Doctests
 
 | Test | Input                      | Expected Result | Actual Result | Pass/Fail |
 | ---- | -------------------------- | --------------- | ------------- | --------- |
-| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | ERROR 'upgradeDowngradeHistory'            | ERROR 'upgradeDowngradeHistory'          | Pass      |
-| 2    | data = False               | ERROR 'bool' object is not subscriptable            | ERROR 'bool' object is not subscriptable          | Pass      |
-| 3    | data = None                | ERROR 'NoneType' object is not subscriptable            | ERROR 'NoneType' object is not subscriptable          | Pass      |
-| 4    | data = 'Wrong data format' | ERROR string indices must be integers            | ERROR string indices must be integers          | Pass      |
-| 5    | data = [1, 2, 3]           | ERROR list indices must be integers or slices, not str            | ERROR list indices must be integers or slices, not str          | Pass      |
-| 6    | data = 1                   | ERROR 'int' object is not subscriptable            | ERROR 'int' object is not subscriptable          | Pass      |
+| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | None            | ` KeyError: 'upgradeDowngradeHistory'`          | Fail      |
+| 2    | data = False               | None            | `TypeError: 'bool' object is not subscriptable`          | Fail      |
+| 3    | data = None                | None            | `TypeError: 'NoneType' object is not subscriptable`          | Fail      |
+| 4    | data = 'Wrong data format' | None            | `TypeError: string indices must be integers`          | Fail      |
+| 5    | data = [1, 2, 3]           | None            | `TypeError: list indices must be integers or slices, not str`          | Fail      |
+| 6    | data = 1                   | None           | `TypeError: 'int' object is not subscriptable`          | Fail      |
 
-* Noted that this test case was marked as "expected failure" so the expected results of the test scripts are failure
+### Test Script/Results (After Software Fixing)
+#### 1. Unit Tesing
+| Test | Input                      | Expected Result | Actual Result | Pass/Fail |
+| ---- | -------------------------- | --------------- | ------------- | --------- |
+| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | An Exception is raised            | None          | Fail      |
+| 2    | data = False               |An Exception is raised            | None          | Fail      |
+| 3    | data = None                | An Exception is raised            | None          | Fail      |
+| 4    | data = 'Wrong data format' | An Exception is raised            | None          | Fail      |
+| 5    | data = [1, 2, 3]           | An Exception is raised            | None          | Fail      |
+| 6    | data = 1                   | An Exception is raised            | None          | Fail      |
+
+* Noted that this test case was marked as "expected failure" so the expected results of the test scripts are failure. If all the test scripts fail, the program will return success as no bugs were found in the program. If all the test scripts pass, the program will return failure as there are bugs in the program.
+
+#### 2. Doctests
+
+| Test | Input                      | Expected Result | Actual Result | Pass/Fail |
+| ---- | -------------------------- | --------------- | ------------- | --------- |
+| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | None            | None          | Pass      |
+| 2    | data = False               | None            | None          | Pass      |
+| 3    | data = None                | None            | None          | Pass      |
+| 4    | data = 'Wrong data format' | None            | None          | Pass      |
+| 5    | data = [1, 2, 3]           | None            | None          | Pass      |
+| 6    | data = 1                   | None           | None          | Pass      |
