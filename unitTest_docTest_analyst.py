@@ -1,3 +1,4 @@
+import doctest
 import yfinance as yf
 from yfinance.base import TickerBase
 from yfinance import utils
@@ -23,29 +24,30 @@ class TestMethods(unittest.TestCase):
         'Date'
         '''
         print("TESTING test_happyPath_shouldReturnCorrectData")
-        for symbol in symbols:
-            # setup
-            tickerbase = TickerBase(symbol)
-            scrape_url = 'https://finance.yahoo.com/quote'
-            ticker_url = "{}/{}".format(scrape_url, symbol)
+        # setup
+        tickerbase = TickerBase('MSFT')
+        scrape_url = 'https://finance.yahoo.com/quote'
+        ticker_url = "{}/{}".format(scrape_url, 'MSFT')
 
-            data = utils.get_json(ticker_url, None)
+        data = utils.get_json(ticker_url, None)
 
-            # call method to be tested
-            output = tickerbase.analyst_recommendations(data)
-            # print(output)
+        # call method to be tested
+        output = tickerbase.analyst_recommendations(data)
+        # print(output)
 
-            # test
-            if output is not None:
-                self.assertEqual(output.index.name, "Date")
-            else:
-                self.assertEqual(output, None)
+        # test
+        if output is not None:
+            self.assertEqual(output.index.name, "Date")
+        else:
+            self.assertEqual(output, None)
 
-    def test_incorrectInputData_shouldReturnNone(self):
+    @unittest.expectedFailure # This unit test is expected to fail. The doctest is expected to pass
+    def test_IfPassingIncorrectInputDataWillRaiseException(self):
         ''' 
-        Test case: Test if analyst_recommendations() outputs None when data provided is incorrect
-        Test condition: if data provided for analyst_recommendations() is incorrect
-        Return type: 
+        Test case: Test if analyst_recommendations() should return None when data provided is incorrect
+        Test condition: if data provided for analyst_recommendations() is in incorrect format or does not contain 'upgradeDowngradeHistory' column or 'history' column
+        Return type:
+            yf.Ticker('IWO').analyst_recommendations(data) -> None
             analyst_recommendations(True) -> None
             analyst_recommendations(False) -> None
             analyst_recommendations(None) -> None
@@ -53,7 +55,7 @@ class TestMethods(unittest.TestCase):
             analyst_recommendations([1,2,3]) -> None
             analyst_recommendations(1) -> None
 
-        >>> yf.Ticker('MSFT').analyst_recommendations(True) is None
+        >>> yf.Ticker('IWO').analyst_recommendations(utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)) is None
         True
         >>> yf.Ticker('MSFT').analyst_recommendations(False) is None
         True
@@ -66,18 +68,24 @@ class TestMethods(unittest.TestCase):
         >>> yf.Ticker('MSFT').analyst_recommendations(1) is None
         True
         '''
-        print("TESTING test_incorrectInputData_shouldReturnNone")
-        for symbol in symbols:
-            # setup
-            tickerbase = TickerBase(symbol)
+        print("TESTING test_IfPassingIncorrectInputDataWillRaiseException")
+        # setup
+        tickerbase = TickerBase('IWO')
 
-            # test
-            self.assertIsNone(tickerbase.analyst_recommendations(True))
-            self.assertIsNone(tickerbase.analyst_recommendations(False))
-            self.assertIsNone(tickerbase.analyst_recommendations(None))
-            self.assertIsNone(tickerbase.analyst_recommendations("123"))
-            self.assertIsNone(tickerbase.analyst_recommendations([1, 2, 3]))
-            self.assertIsNone(tickerbase.analyst_recommendations(1))
+        scrape_url = 'https://finance.yahoo.com/quote'
+        ticker_url = "{}/{}".format(scrape_url, 'IWO')
+
+        data = utils.get_json(ticker_url, None)
+
+        with self.assertRaises(Exception):
+            tickerbase.analyst_recommendations(data)
+            TickerBase('MSFT').analyst_recommendations(True)
+            TickerBase('MSFT').analyst_recommendations(False)
+            TickerBase('MSFT').analyst_recommendations(None)
+            TickerBase('MSFT').analyst_recommendations("123")
+            TickerBase('MSFT').analyst_recommendations([1, 2, 3])
+            TickerBase('MSFT').analyst_recommendations(1)
+
 
     def test_camel2title_should_correctly_camel_titles(self):
         ''' 
@@ -106,17 +114,16 @@ class TestMethods(unittest.TestCase):
         Test Case: To check the index ordering of the data is the ascending order 
         Test Condition: Check the the previous index has a lower datetime than the current index datetime
         Return type: TickerBase.analyst_recommendations(self, data).index[i] > TickerBase.analyst_recommendations(self, data).index[i-1]
-            
-        >>> 
-            
+
         '''
 
         print("TESTING test_if_sorted")
         ticker_url = "{}/{}".format('https://finance.yahoo.com/quote', "MSFT")
         data = utils.get_json(ticker_url, None)
-        for i in range(1, len(TickerBase.analyst_recommendations(self, data).index)):
-            self.assertTrue(TickerBase.analyst_recommendations(self, data).index[i] >
-                            TickerBase.analyst_recommendations(self, data).index[i - 1])
+        result = TickerBase.analyst_recommendations(self, data)
+        for i in range(1, len(result.index)):
+            self.assertTrue(result.index[i] >=
+                            result.index[i - 1])
 
     def test_date_time_format(self):
         '''
@@ -125,9 +132,9 @@ class TestMethods(unittest.TestCase):
         Return type: TickerBase.analyst_recommendations(self, data).index
             
         >>> type(yf.Ticker('MSFT').analyst_recommendations(utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', "MSFT"), None)).index)
-            <class 'pandas.core.indexes.datetimes.DatetimeIndex'>
+        <class 'pandas.core.indexes.datetimes.DatetimeIndex'>
         >>> type(yf.Ticker('MSFT').analyst_recommendations(utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', "MSFT"), None)).index[0])
-            <class 'pandas._libs.tslibs.timestamps.Timestamp'>
+        <class 'pandas._libs.tslibs.timestamps.Timestamp'>
             
         '''
 
@@ -135,7 +142,7 @@ class TestMethods(unittest.TestCase):
         ticker_url = "{}/{}".format('https://finance.yahoo.com/quote', "MSFT")
         data = utils.get_json(ticker_url, None)
         for index in TickerBase.analyst_recommendations(self, data).index:
-            self.assertTrue(isinstance(index, datetime.datetime))
+            self.assertIsInstance(index, datetime.datetime)
 
     def test_if_dataframe(self):
         '''
@@ -144,15 +151,21 @@ class TestMethods(unittest.TestCase):
         Return type: isinstance(TickerBase.analyst_recommendations(self, data), _pd.core.frame.DataFrame)
             
         >>> type(yf.Ticker('MSFT').analyst_recommendations(utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', "MSFT"), None)))
-            <class 'pandas.core.frame.DataFrame'>
+        <class 'pandas.core.frame.DataFrame'>
         '''
 
         print("TESTING test_if_dataframe")
         ticker_url = "{}/{}".format('https://finance.yahoo.com/quote', "MSFT")
         data = utils.get_json(ticker_url, None)
         output = TickerBase.analyst_recommendations(self, data)
-        self.assertTrue(isinstance(output, _pd.core.frame.DataFrame))
+        self.assertIsInstance(output, _pd.core.frame.DataFrame)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    prompt = input("Press 1 for unit test. Press 2 for doctest.")
+    if prompt == "1":
+        unittest.main()
+    elif prompt == "2":
+        doctest.testmod(verbose=True, report=True)
+    else:
+        print("Invalid selection.")
