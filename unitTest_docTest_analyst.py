@@ -41,13 +41,13 @@ class TestMethods(unittest.TestCase):
         else:
             self.assertEqual(output, None)
 
-    @unittest.expectedFailure # This unit test is expected to fail
+    @unittest.expectedFailure # This unit test is expected to fail. The doctest is expected to pass
     def test_IfPassingIncorrectInputDataWillRaiseException(self):
         ''' 
-        Test case: Test if analyst_recommendations() will raise an exception when data provided is incorrect
+        Test case: Test if analyst_recommendations() should return None when data provided is incorrect
         Test condition: if data provided for analyst_recommendations() is in incorrect format or does not contain 'upgradeDowngradeHistory' column or 'history' column
         Return type:
-            yf.Ticker('IWO').analyst_recommendations(data) -> None, where data is
+            yf.Ticker('IWO').analyst_recommendations(data) -> None
             analyst_recommendations(True) -> None
             analyst_recommendations(False) -> None
             analyst_recommendations(None) -> None
@@ -56,20 +56,19 @@ class TestMethods(unittest.TestCase):
             analyst_recommendations(1) -> None
 
         >>> yf.Ticker('IWO').analyst_recommendations(utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None))
-        ERROR 'upgradeDowngradeHistory'
+        None
         >>> yf.Ticker('MSFT').analyst_recommendations(False)
-        ERROR 'bool' object is not subscriptable
+        None
         >>> yf.Ticker('MSFT').analyst_recommendations(None)
-        ERROR 'NoneType' object is not subscriptable
+        None
         >>> yf.Ticker('MSFT').analyst_recommendations('wrong data format')
-        ERROR string indices must be integers
+        None
         >>> yf.Ticker('MSFT').analyst_recommendations([1,2,3])
-        ERROR list indices must be integers or slices, not str
+        None
         >>> yf.Ticker('MSFT').analyst_recommendations(1)
-        ERROR 'int' object is not subscriptable
-
+        None
         '''
-        print("TESTING test_incorrectInputData_shouldReturnNone")
+        print("TESTING test_IfPassingIncorrectInputDataWillRaiseException")
         # setup
         tickerbase = TickerBase('IWO')
 
@@ -78,13 +77,15 @@ class TestMethods(unittest.TestCase):
 
         data = utils.get_json(ticker_url, None)
 
-        self.assertRaises(Exception, tickerbase.analyst_recommendations(data))
-        self.assertRaises(Exception, TickerBase('MSFT').analyst_recommendations(True))
-        self.assertRaises(Exception, TickerBase('MSFT').analyst_recommendations(False))
-        self.assertRaises(Exception, TickerBase('MSFT').analyst_recommendations(None))
-        self.assertRaises(Exception, TickerBase('MSFT').analyst_recommendations("123"))
-        self.assertRaises(Exception, TickerBase('MSFT').analyst_recommendations([1,2,3]))
-        self.assertRaises(Exception, TickerBase('MSFT').analyst_recommendations(1))
+        with self.assertRaises(Exception):
+            tickerbase.analyst_recommendations(data)
+            TickerBase('MSFT').analyst_recommendations(True)
+            TickerBase('MSFT').analyst_recommendations(False)
+            TickerBase('MSFT').analyst_recommendations(None)
+            TickerBase('MSFT').analyst_recommendations("123")
+            TickerBase('MSFT').analyst_recommendations([1, 2, 3])
+            TickerBase('MSFT').analyst_recommendations(1)
+
 
     def test_camel2title_should_correctly_camel_titles(self):
         ''' 
@@ -121,7 +122,7 @@ class TestMethods(unittest.TestCase):
         data = utils.get_json(ticker_url, None)
         result = TickerBase.analyst_recommendations(self, data)
         for i in range(1, len(result.index)):
-            self.assertTrue(result.index[i] >
+            self.assertTrue(result.index[i] >=
                             result.index[i - 1])
 
     def test_date_time_format(self):
