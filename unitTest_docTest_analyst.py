@@ -55,18 +55,18 @@ class TestMethods(unittest.TestCase):
             analyst_recommendations([1,2,3]) -> None
             analyst_recommendations(1) -> None
 
-        >>> yf.Ticker('IWO').analyst_recommendations(utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None))
-        None
-        >>> yf.Ticker('MSFT').analyst_recommendations(False)
-        None
-        >>> yf.Ticker('MSFT').analyst_recommendations(None)
-        None
-        >>> yf.Ticker('MSFT').analyst_recommendations('wrong data format')
-        None
-        >>> yf.Ticker('MSFT').analyst_recommendations([1,2,3])
-        None
-        >>> yf.Ticker('MSFT').analyst_recommendations(1)
-        None
+        >>> yf.Ticker('IWO').analyst_recommendations(utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)) is None
+        True
+        >>> yf.Ticker('MSFT').analyst_recommendations(False) is None
+        True
+        >>> yf.Ticker('MSFT').analyst_recommendations(None) is None
+        True
+        >>> yf.Ticker('MSFT').analyst_recommendations('wrong data format') is None
+        True
+        >>> yf.Ticker('MSFT').analyst_recommendations([1,2,3]) is None
+        True
+        >>> yf.Ticker('MSFT').analyst_recommendations(1) is None
+        True
         '''
         print("TESTING test_IfPassingIncorrectInputDataWillRaiseException")
         # setup
