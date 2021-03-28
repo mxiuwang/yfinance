@@ -4,7 +4,9 @@
   - [1.1 Objectives](#11-objectives)
   - [1.2 Team Members](#12-Team-Members)
 - [2 Risk](#2-Risk)
-- [3 Problems found during research](#3-Problems-found-during-research)
+- [3 Research and Screening](#3-Research-and-Screening)
+  - [3.1 Issues](#31-Issues)
+  - [3.2 Pull Requests](#32-Pull-Requests)
 - [4 Test Approach](#4-Test-Approach)
 - [5 Test Environment](#5-Test-Environment)
 - [6  Planned Test](#6-Planned-Test)
@@ -36,7 +38,48 @@ Ever since Yahoo! finance decommissioned their historical data API, many program
 | 5 | Unable to install consistent testing environments across all OS/machines                                     | Medium | Tests only work on some machines      | Test on all systems (Windows, Linux, MacOS)                                                                                                                                                              |
 | 6 | Unable to isolate/test some features                                                                         | High   | Incomplete test cases                 | Ask for help at office hours, collaborate with teammates to exchange ideas                                                                                                                               |
 
-# 3 Problems found during research
+# 3 Research and Screening
+This sections list all the pull requests and issues that are related to the piece of code.
+## 3.1 Issues
+- **Issue#167**: Attributes in yf.Ticker("MSFT") as dict
+  - https://github.com/ranaroussi/yfinance/issues/167
+  - The issue author was asking for the purpose of storing each value as an attribute instead of in a nested dictionary.
+  - This issue is related to the piece of code to which we were assigned to because the value returned from our function was stored in `self._recommendations`, that is, an attribute, instead of a nested dictionary. 
+
+- **Issue#329**: Analysis / Recommendations
+  - https://github.com/ranaroussi/yfinance/issues/329
+  - The issue author got an value error when trying to generate analysis recommendations. The author believed the reason of the error was 
+    > Yahoo Finance has removed the table format from their Analysis tab.
+
+    However, the author did not pose the details of the error. The description of this issue was not clear enough for investigation. 
+
+## 3.2 Pull Requests
+- **PR#309**: Integrate fixes from some forks, minor cleanups
+  - https://github.com/ranaroussi/yfinance/pull/309
+  - In this PR, a if condition was added to the function. The following block of statement will only be executed if the `data` passed in the function call contains `upgradeDowngradeHistory` and `history`.
+  ```
+  rec = _pd.DataFrame(
+                    data["upgradeDowngradeHistory"]["history"]
+                )
+                rec["earningsDate"] = _pd.to_datetime(
+                    rec["epochGradeDate"], unit="s"
+                )
+                rec.set_index("earningsDate", inplace=True)
+                rec.index.name = "Date"
+                rec.columns = utils.camel2title(rec.columns)
+                self._recommendations = rec[
+                    ["Firm", "To Grade", "From Grade", "Action"]
+                ].sort_index()
+  ```
+  - This change implements a solution to one of the problems identified by our tests. Our tests discovered that an exception will be raised if the varaible passed in the function call does not contain `upgradeDowngradeHistory` and `history`. This PR solved this issue by checking if the variable contains `upgradeDowngradeHistory` and `history` before executing the function.
+
+- **PR#321**: Fixed stock.financials/balance_sheet/cashflow . Added valuation indicators.
+  - https://github.com/ranaroussi/yfinance/pull/321
+  - In this PR, the varaible `data` was rename to `qssData`. This change would not affect our test cases.
+
+- **PR#590**: change _get_fundamentals to keep QuoteSummaryStore in memory for later use
+  - https://github.com/ranaroussi/yfinance/pull/590
+  - In this PR, one more restriction was added to the `data` passed in the function. This change would affect our test cases because we might need to redefine what is the correct data format.
 
 # 4 Test Approach
 
