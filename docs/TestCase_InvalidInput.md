@@ -22,15 +22,15 @@ No special setup
 
 ### Test Script/Results (Before Software Fixing)
 
-#### 1. Unit Tesing
-| Test | Input                      | Expected Result | Actual Result | Pass/Fail |
+#### 1. Unit Testing
+| Test | Input                      | Expected Result | Actual Result | Pass/Fail | Testing Result |
 | ---- | -------------------------- | --------------- | ------------- | --------- |
-| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | An Exception is raised            | ` KeyError: 'upgradeDowngradeHistory'`          | Pass      |
-| 2    | data = False               |An Exception is raised            | `TypeError: 'bool' object is not subscriptable`          | Pass      |
-| 3    | data = None                | An Exception is raised            | `TypeError: 'NoneType' object is not subscriptable`          | Pass      |
-| 4    | data = 'Wrong data format' | An Exception is raised            | `TypeError: string indices must be integers`          | Pass      |
-| 5    | data = [1, 2, 3]           | An Exception is raised            | `TypeError: list indices must be integers or slices, not str`          | Pass      |
-| 6    | data = 1                   | An Exception is raised            | `TypeError: 'int' object is not subscriptable`          | Pass      |
+| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | An Exception is raised            | ` KeyError: 'upgradeDowngradeHistory'`          | Pass      | Fail |
+| 2    | data = False               |An Exception is raised            | `TypeError: 'bool' object is not subscriptable`          | Pass      | Fail |
+| 3    | data = None                | An Exception is raised            | `TypeError: 'NoneType' object is not subscriptable`          | Pass      | Fail |
+| 4    | data = 'Wrong data format' | An Exception is raised            | `TypeError: string indices must be integers`          | Pass      | Fail |
+| 5    | data = [1, 2, 3]           | An Exception is raised            | `TypeError: list indices must be integers or slices, not str`          | Pass      | Fail |
+| 6    | data = 1                   | An Exception is raised            | `TypeError: 'int' object is not subscriptable`          | Pass      | Fail |
 
 * Noted that this test case was marked as "expected failure" so the expected results of the test scripts are failure. If all the test scripts fail, the program will return success as no bugs were found in the program. If all the test scripts pass, the program will return failure as there are bugs in the program.
 
@@ -46,15 +46,15 @@ No special setup
 | 6    | data = 1                   | None           | `TypeError: 'int' object is not subscriptable`          | Fail      |
 
 ### Test Script/Results (After Software Fixing)
-#### 1. Unit Tesing
-| Test | Input                      | Expected Result | Actual Result | Pass/Fail |
+#### 1. Unit Testing
+| Test | Input                      | Expected Result | Actual Result | Pass/Fail | Testing Result |
 | ---- | -------------------------- | --------------- | ------------- | --------- |
-| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | An Exception is raised            | None          | Fail      |
-| 2    | data = False               |An Exception is raised            | None          | Fail      |
-| 3    | data = None                | An Exception is raised            | None          | Fail      |
-| 4    | data = 'Wrong data format' | An Exception is raised            | None          | Fail      |
-| 5    | data = [1, 2, 3]           | An Exception is raised            | None          | Fail      |
-| 6    | data = 1                   | An Exception is raised            | None          | Fail      |
+| 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | An Exception is raised            | None          | Fail      | Pass |
+| 2    | data = False               |An Exception is raised            | None          | Fail      | Pass |
+| 3    | data = None                | An Exception is raised            | None          | Fail      | Pass |
+| 4    | data = 'Wrong data format' | An Exception is raised            | None          | Fail      | Pass |
+| 5    | data = [1, 2, 3]           | An Exception is raised            | None          | Fail      | Pass |
+| 6    | data = 1                   | An Exception is raised            | None          | Fail      | Pass |
 
 * Noted that this test case was marked as "expected failure" so the expected results of the test scripts are failure. If all the test scripts fail, the program will return success as no bugs were found in the program. If all the test scripts pass, the program will return failure as there are bugs in the program.
 
