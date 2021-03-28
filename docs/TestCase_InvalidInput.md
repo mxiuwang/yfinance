@@ -24,7 +24,7 @@ No special setup
 
 #### 1. Unit Testing
 | Test | Input                      | Expected Result | Actual Result | Pass/Fail | Testing Result |
-| ---- | -------------------------- | --------------- | ------------- | --------- |
+| ---- | -------------------------- | --------------- | ------------- | --------- | ------ |
 | 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | An Exception is raised            | ` KeyError: 'upgradeDowngradeHistory'`          | Pass      | Fail |
 | 2    | data = False               |An Exception is raised            | `TypeError: 'bool' object is not subscriptable`          | Pass      | Fail |
 | 3    | data = None                | An Exception is raised            | `TypeError: 'NoneType' object is not subscriptable`          | Pass      | Fail |
@@ -37,7 +37,7 @@ No special setup
 #### 2. Doctests
 
 | Test | Input                      | Expected Result | Actual Result | Pass/Fail |
-| ---- | -------------------------- | --------------- | ------------- | --------- |
+| ---- | -------------------------- | --------------- | ------------- | --------- | ------ |
 | 1    | data = utils.get_json("{}/{}".format('https://finance.yahoo.com/quote', 'IWO'), None)                | None            | ` KeyError: 'upgradeDowngradeHistory'`          | Fail      |
 | 2    | data = False               | None            | `TypeError: 'bool' object is not subscriptable`          | Fail      |
 | 3    | data = None                | None            | `TypeError: 'NoneType' object is not subscriptable`          | Fail      |
